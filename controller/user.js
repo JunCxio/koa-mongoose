@@ -55,7 +55,7 @@ let add = async (ctx, next) => {
       desc: ctx.request.body.desc || '-',
       id: uuid()
     }
-    userModel.create(newMsg, function(err, doc) {})
+    await userModel.create(newMsg, function(err, doc) {})
     ctx.body = { respCode: 10000000, data: newMsg, repMessage: '新增成功!' }
   } catch (e) {
     ctx.body = { respCode: 11000000, data: [], repMessage: '新增失败!' }
