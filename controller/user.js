@@ -1,6 +1,35 @@
 const userModel = require('../models/user')
 const uuid = require('uuid/v1')
 
+//注册
+let register = async (ctx, next) => {
+  try {
+    let newMsg = {
+      avatar: ctx.request.body.avatar,
+      userName: ctx.request.body.userName,
+      accountNum: ctx.request.body.accountNum,
+      password: ctx.request.body.password,
+      id: uuid()
+    }
+    await userModel.create(newMsg, function(err, doc) {})
+    ctx.body = { respCode: 10000000, data: newMsg, repMessage: '注册成功!' }
+  } catch (e) {
+    ctx.body = { respCode: 11000000, data: [], repMessage: '注册失败!' }
+  }
+}
+
+//登录
+let login = async (ctx, next) => {
+  let accountNum = ctx.request.body.accountNum
+  let password = ctx.request.body.password
+  let result = await userModel.find({ accountNum }, { _id: 0, __v: 0 })
+  if (result && result.length && result[0].password == password) {
+    ctx.body = { respCode: 10000000, data: result, repMessage: '登录成功!' }
+  } else {
+    ctx.body = { respCode: 11000000, data: [], repMessage: '用户名或密码错误!' }
+  }
+}
+
 //查询所有
 let findAll = async (ctx, next) => {
   let pageSize = ctx.request.body.pageSize
@@ -33,76 +62,15 @@ let findAll = async (ctx, next) => {
   }
 }
 
-//查找单个
-let findOne = async (ctx, next) => {
-  let id = ctx.request.body.id
-  let result = await userModel.find({ id }, { _id: 0, __v: 0 })
-  if (result) {
-    ctx.body = { respCode: 10000000, data: result, repMessage: '查询成功!' }
-  } else {
-    ctx.body = { respCode: 10000000, data: [], repMessage: '查询失败!' }
-  }
-}
-
-//增加
-let add = async (ctx, next) => {
-  try {
-    let newMsg = {
-      name: ctx.request.body.name,
-      sex: ctx.request.body.sex,
-      area: ctx.request.body.area || '-',
-      mobile: ctx.request.body.mobile || '-',
-      desc: ctx.request.body.desc || '-',
-      id: uuid()
-    }
-    await userModel.create(newMsg, function(err, doc) {})
-    ctx.body = { respCode: 10000000, data: newMsg, repMessage: '新增成功!' }
-  } catch (e) {
-    ctx.body = { respCode: 11000000, data: [], repMessage: '新增失败!' }
-  }
-}
-
-//删除
-let deleteUser = async (ctx, next) => {
-  try {
-    let id = ctx.request.body.id
-    await userModel.remove({ id }).exec((err, doc) => {
-      if (!err) {
-        console.log(doc)
-      }
-    })
-    ctx.body = { respCode: 10000000, repMessage: '删除成功!' }
-  } catch (error) {
-    ctx.body = { respCode: 10000000, repMessage: '删除失败!' }
-  }
-}
-
-//编辑
-let updata = async (ctx, next) => {
-  try {
-    let id = ctx.request.body.id
-    let newMsg = {
-      name: ctx.request.body.name,
-      sex: ctx.request.body.sex,
-      area: ctx.request.body.area || '-',
-      mobile: ctx.request.body.mobile || '-',
-      desc: ctx.request.body.desc || '-'
-    }
-    await userModel.update({ id }, newMsg, (err, raw) => {
-      if (!err) {
-        console.log(raw)
-      }
-    })
-    ctx.body = { respCode: 10000000, repMessage: '编辑成功!' }
-  } catch (error) {
-    ctx.body = { respCode: 10000000, repMessage: '编辑失败!' }
+//获取头像
+let uploadAvatar = async (ctx, next) => {
+  ctx.body = {
+    filename: ctx.req.file.filename //返回文件名
   }
 }
 
 module.exports = {
-  findAll,
-  add,
-  deleteUser,
-  updata,
-  findOne
+  register,
+  login,
+  uploadAvatar
 }

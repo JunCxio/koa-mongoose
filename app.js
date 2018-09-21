@@ -7,7 +7,7 @@ const cors = require('koa2-cors')
 
 const mongoose = require('mongoose')
 mongoose.connect(
-  'mongodb://localhost:27017/test',
+  'mongodb://localhost:27017/Demo',
   err => {
     if (err) {
       console.log('数据库连接失败!')
@@ -28,10 +28,15 @@ app.use(
     // },
     origin: '*',
     exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
-    maxAge: 5,
+    maxAge: 3600,
     credentials: true,
-    allowMethods: ['GET', 'POST', 'DELETE'],
-    allowHeaders: ['Content-Type', 'Authorization', 'Accept']
+    allowMethods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'],
+    allowHeaders: [
+      'Content-Type',
+      'Authorization',
+      'Accept',
+      'x-requested-with'
+    ]
   })
 )
 
