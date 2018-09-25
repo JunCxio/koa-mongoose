@@ -4,12 +4,12 @@ const Schema = mongoose.Schema
 //定义用户Schema
 const userSchema = new Schema({
   avatar: {
-    type: String,
-    required: true
+    type: String
   },
   userName: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   accountNum: {
     type: String,

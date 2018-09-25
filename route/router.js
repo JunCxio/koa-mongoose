@@ -2,6 +2,7 @@ const router = require('koa-router')()
 const multer = require('koa-multer')
 const LoginStrategy = require('../controller/user')
 const Code = require('../controller/code')
+const Message = require('../controller/comment')
 
 /**
  * 注册
@@ -49,3 +50,13 @@ var upload = multer({ storage })
 router.post('/api/upload', upload.single('avatar'), LoginStrategy.uploadAvatar)
 
 module.exports = router
+
+/**
+ * 发表评论
+ */
+router.post('/api/comment', Message.comment)
+
+/**
+ * 获取全部评论
+ */
+router.post('/api/commentList', Message.getComment)

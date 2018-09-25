@@ -30,38 +30,6 @@ let login = async (ctx, next) => {
   }
 }
 
-//查询所有
-let findAll = async (ctx, next) => {
-  let pageSize = ctx.request.body.pageSize
-  let page = ctx.request.body.page
-  let result = await userModel
-    .find(null, { _id: 0, __v: 0 })
-    .sort({ _id: -1 })
-    .limit(pageSize)
-    .skip((page - 1) * pageSize)
-    .exec()
-  let total = await userModel
-    .find(null, { _id: 0, __v: 0 })
-    .count((err, count) => {
-      return count
-    })
-  if (result) {
-    ctx.body = {
-      respCode: 10000000,
-      data: result,
-      repMessage: '查询成功!',
-      total: total
-    }
-  } else {
-    ctx.body = {
-      respCode: 11000000,
-      data: [],
-      repMessage: '查询失败!',
-      total: 0
-    }
-  }
-}
-
 //获取头像
 let uploadAvatar = async (ctx, next) => {
   ctx.body = {
