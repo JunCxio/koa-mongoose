@@ -1,8 +1,8 @@
-const router = require('koa-router')()
-const multer = require('koa-multer')
-const LoginStrategy = require('../controller/user')
-const Code = require('../controller/code')
-const Message = require('../controller/comment')
+const router = require('koa-router')();
+const multer = require('koa-multer');
+const LoginStrategy = require('../controller/user');
+const Code = require('../controller/code');
+const Message = require('../controller/comment');
 
 /**
  * 注册
@@ -11,52 +11,52 @@ const Message = require('../controller/comment')
  * @param accountNum 账号
  * @param password 密码
  */
-router.post('/api/register', LoginStrategy.register)
+router.post('/api/register', LoginStrategy.register);
 
 /**
  * 登录
  * @param accountNum 账号
  * @param password 密码
  */
-router.post('/api/login', LoginStrategy.login)
+router.post('/api/login', LoginStrategy.login);
 
 /**
  * 获取验证码
  */
-router.get('/api/code', Code.checkcode)
+router.get('/api/code', Code.checkcode);
 
 //配置koa-multer
 var storage = multer.diskStorage({
   //文件保存路径
   destination: function(req, file, cb) {
-    cb(null, 'avatar/')
+    cb(null, 'avatar/');
   },
   //修改文件名称
   filename: function(req, file, cb) {
-    console.log(file)
-    var fileFormat = file.originalname.split('.')
-    console.log(fileFormat)
-    console.log(cb)
-    cb(null, Date.now() + '.' + fileFormat[fileFormat.length - 1])
+    console.log(file);
+    var fileFormat = file.originalname.split('.');
+    console.log(fileFormat);
+    console.log(cb);
+    cb(null, Date.now() + '.' + fileFormat[fileFormat.length - 1]);
   }
-})
+});
 
 //加载配置
-var upload = multer({ storage })
+var upload = multer({ storage });
 
 /**
  * 上传头像
  */
-router.post('/api/upload', upload.single('avatar'), LoginStrategy.uploadAvatar)
-
-module.exports = router
+router.post('/api/upload', upload.single('avatar'), LoginStrategy.uploadAvatar);
 
 /**
  * 发表评论
  */
-router.post('/api/comment', Message.comment)
+router.post('/api/comment', Message.comment);
 
 /**
  * 获取全部评论
  */
-router.post('/api/commentList', Message.getComment)
+router.post('/api/commentList', Message.getComment);
+
+module.exports = router;
