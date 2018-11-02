@@ -1,8 +1,12 @@
-const router = require('koa-router')();
+const Router = require('koa-router');
 const multer = require('koa-multer');
 const LoginStrategy = require('../controller/user');
 const Code = require('../controller/code');
 const Message = require('../controller/comment');
+
+const router = new Router({
+  // prefix: '/ljh'//层级,请求前不加会报错
+});
 
 /**
  * 注册
@@ -60,3 +64,36 @@ router.post('/api/comment', Message.comment);
 router.post('/api/commentList', Message.getComment);
 
 module.exports = router;
+
+//====================================================================================================
+// /**
+//  * 子路由
+//  */
+// let home = new router();
+// home
+//   .get('/jspang', async ctx => {
+//     ctx.body = 'home JSpang page';
+//   })
+//   .get('/todo', async ctx => {
+//     ctx.body = 'Home toDo Page';
+//   });
+
+// let page = new router();
+// page
+//   .get('/jspang', async ctx => {
+//     ctx.body = 'page JSpang page';
+//   })
+//   .get('/todo', async ctx => {
+//     ctx.body = 'Page toDo Page';
+//   });
+
+// /**
+//  * 父路由
+//  */
+// let router = new router();
+// router.use('/home', home.routes(), home.allowdMethods());
+// router.use('/page', page.routes(), page.allowdMethods());
+
+// app.use(router.routes()).use(router.allowdMethods());
+
+//====================================================================================================
